@@ -38,6 +38,7 @@ const Header: React.FC = () => {
     logout().then(() => {
       notification.success({
         message: "Logged out successfully",
+        placement: "bottomRight",
       });
     });
   };

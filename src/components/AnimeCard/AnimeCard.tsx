@@ -1,11 +1,12 @@
 import React from "react";
-import { HeartOutlined, StarFilled } from "@ant-design/icons";
-import { Card } from "antd";
+import { HeartOutlined, HeartFilled, StarFilled } from "@ant-design/icons";
+import { Card, notification } from "antd";
 import { Anime } from "../../types/Anime";
 import { purple } from "@ant-design/colors";
 import { truncate } from "lodash";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import useAuth from "../../context/Auth";
 
 type AnimeCardProps = {
   anime: Anime;
@@ -18,9 +19,28 @@ const StyledDescription = styled.div`
 `;
 
 const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
+  const { user, addFav, removeFav } = useAuth();
   const navigate = useNavigate();
 
+  const isFav = user?.favorites.includes(anime.id);
+
   const handleNavigateAnime = () => navigate(`/anime/${anime.id}`);
+
+  const handleFav = () => {
+    if (!user) {
+      notification.warning({
+        message: "Login to fav",
+        description: "Mark favs is only allowed for users",
+        placement: "bottomRight",
+      });
+    }
+
+    addFav(anime?.id);
+  };
+
+  const handleUnfav = () => {
+    removeFav(anime?.id);
+  };
 
   return (
     <Card
@@ -34,7 +54,15 @@ const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
       }
       hoverable
       actions={[
-        <HeartOutlined key="heart" />,
+        isFav ? (
+          <HeartFilled
+            onClick={handleUnfav}
+            key="heart"
+            style={{ color: purple[8] }}
+          />
+        ) : (
+          <HeartOutlined onClick={handleFav} key="heart" />
+        ),
         <>
           {anime?.averageScore}{" "}
           <StarFilled key="star" style={{ color: purple[5], width: "auto" }} />

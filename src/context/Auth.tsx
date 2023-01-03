@@ -18,6 +18,8 @@ interface AuthContextType {
   error?: any;
   login: (user: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  addFav: (id: string) => Promise<void>;
+  removeFav: (id: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -68,6 +70,19 @@ export function AuthProvider({
     api.logout().then(() => setUser(undefined));
   };
 
+  const addFav = async (id: string) => {
+    setUser({ ...user, favorites: [...(user?.favorites ?? []), id] } as User);
+    api.setFavs({ user });
+  };
+
+  const removeFav = async (id: string) => {
+    setUser({
+      ...user,
+      favorites: (user?.favorites ?? []).filter((fav) => fav !== id),
+    } as User);
+    api.setFavs({ user });
+  };
+
   // Avoiding useless re-renders
   const memoedValue = useMemo(
     () => ({
@@ -76,6 +91,8 @@ export function AuthProvider({
       error,
       login,
       logout,
+      addFav,
+      removeFav,
     }),
     [user, loading, error]
   );

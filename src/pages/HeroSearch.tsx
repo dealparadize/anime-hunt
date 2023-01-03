@@ -30,7 +30,6 @@ const LottieTypography = styled(Typography.Title)`
 const HeroSearch: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("s");
-  console.log(search);
 
   const onSearch = (value: string) => setSearchParams({ s: value });
 

@@ -27,6 +27,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ open = false, onClose }) => {
         notification.success({
           message: `Welcome ${values.username}`,
           description: "Logged in successfully",
+          placement: "bottomRight",
         });
         form.resetFields();
         onClose?.();
@@ -38,6 +39,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ open = false, onClose }) => {
     notification.error({
       message: `Error on login`,
       description: "Try again",
+      placement: "bottomRight",
     });
     onClose?.();
   };

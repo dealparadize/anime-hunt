@@ -37,10 +37,10 @@ const checkSession: () => Promise<User> = async () => {
   return JSON.parse(lsUser) as User;
 };
 
-const setFavs: ({ user }: { user: User }) => void = async ({ user }) => {
+const setFavs: ({ user }: { user?: User }) => void = async ({ user }) => {
   localStorage.setItem(
     `${user?.user}-${LS_FAVS_SUFFIX}`,
-    JSON.stringify(user.favorites)
+    JSON.stringify(user?.favorites)
   );
 
   localStorage.setItem(LS_USER_ITEM, JSON.stringify(user));
