@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { Col, Row, Avatar } from "antd";
+import { Col, Row, Avatar, Typography, notification } from "antd";
 import { useNavigate } from "react-router-dom";
 import { purple } from "@ant-design/colors";
-import { UserOutlined } from "@ant-design/icons";
+import { UserOutlined, LoginOutlined } from "@ant-design/icons";
 import logo from "logo.svg";
 import styled from "styled-components";
 import type { MenuProps } from "antd";
 import { Dropdown } from "antd";
 import LoginModal from "../LoginModal/LoginModal";
+import useAuth from "../../context/Auth";
 
 const Title = styled.h1`
   font-family: "Rubik Vinyl", cursive;
@@ -19,8 +20,11 @@ const StyledHeader = styled.header`
   margin-bottom: 48px;
 `;
 
+const { Text } = Typography;
+
 const Header: React.FC = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
 
   const onShowLoginModal = () => setShowLoginModal(true);
@@ -30,20 +34,31 @@ const Header: React.FC = () => {
 
   const handleNavigateFavs = () => navigate("/favs");
 
-  const items: MenuProps["items"] = [
-    {
-      key: "1",
-      label: <a onClick={handleNavigateFavs}>favs</a>,
-    },
-    {
-      key: "2",
-      label: <a>logout</a>,
-    },
-    {
-      key: "3",
-      label: <a onClick={onShowLoginModal}>login</a>,
-    },
-  ];
+  const handleLogout = () => {
+    logout().then(() => {
+      notification.success({
+        message: "Logged out successfully",
+      });
+    });
+  };
+
+  const items: MenuProps["items"] = user
+    ? [
+        {
+          key: "1",
+          label: <a onClick={handleNavigateFavs}>favs</a>,
+        },
+        {
+          key: "2",
+          label: <a onClick={handleLogout}>logout</a>,
+        },
+      ]
+    : [
+        {
+          key: "1",
+          label: <a onClick={onShowLoginModal}>login</a>,
+        },
+      ];
 
   return (
     <>
@@ -65,12 +80,21 @@ const Header: React.FC = () => {
             </Row>
           </Col>
           <Col span={8}>
-            <Row justify="end">
+            <Row justify="end" align="middle">
+              {user && (
+                <Text style={{ marginRight: "1rem" }}>{user?.user}</Text>
+              )}
               <Dropdown menu={{ items }} placement="bottomLeft">
                 <Avatar
-                  style={{ backgroundColor: purple[3] }}
+                  style={{ backgroundColor: user ? purple[3] : purple[0] }}
                   size="large"
-                  icon={<UserOutlined />}
+                  icon={
+                    user ? (
+                      <UserOutlined />
+                    ) : (
+                      <LoginOutlined style={{ color: purple[5] }} />
+                    )
+                  }
                 />
               </Dropdown>
             </Row>

@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { User } from "../types/User";
+import api from "../api/api";
 // import * as sessionsApi from "./api/sessions";
 // import * as usersApi from "./api/users";
 
@@ -15,8 +16,8 @@ interface AuthContextType {
   user?: User;
   loading: boolean;
   error?: any;
-  login: (user: string, password: string) => void;
-  logout: () => void;
+  login: (user: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -41,30 +42,30 @@ export function AuthProvider({
   // check if there is a currently active session
 
   useEffect(() => {
-    // usersApi
-    //   .getCurrentUser()
-    //   .then((user) => setUser(user))
-    //   .catch((_error) => {})
-    //   .finally(() => setLoadingInitial(false));
+    api
+      .checkSession()
+      .then((user) => setUser(user))
+      .catch((_error) => {})
+      .finally(() => setLoadingInitial(false));
   }, []);
 
   // login handler
-  const login = (user: string, password: string) => {
+  const login = async (user: string, password: string) => {
     setLoading(true);
 
-    // sessionsApi
-    //   .login({ email, password })
-    //   .then((user) => {
-    //     setUser(user);
-    //     navigate("/");
-    //   })
-    //   .catch((error) => setError(error))
-    //   .finally(() => setLoading(false));
+    api
+      .login({ user, password })
+      .then((user) => {
+        setUser(user);
+        navigate("/");
+      })
+      .catch((error) => setError(error))
+      .finally(() => setLoading(false));
   };
 
   // login handler
-  const logout = () => {
-    // sessionsApi.logout().then(() => setUser(undefined));
+  const logout = async () => {
+    api.logout().then(() => setUser(undefined));
   };
 
   // Avoiding useless re-renders
@@ -79,7 +80,7 @@ export function AuthProvider({
     [user, loading, error]
   );
 
-  if (!loadingInitial) return <></>;
+  if (loadingInitial) return <></>;
 
   return (
     <AuthContext.Provider value={memoedValue}>{children}</AuthContext.Provider>

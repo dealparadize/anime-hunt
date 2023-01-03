@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Modal, Form, Input } from "antd";
+import { Modal, Form, Input, notification } from "antd";
+import useAuth from "../../context/Auth";
 
 type LoginModalProps = {
   open?: boolean;
@@ -7,16 +8,13 @@ type LoginModalProps = {
 };
 
 const LoginModal: React.FC<LoginModalProps> = ({ open = false, onClose }) => {
+  const { login } = useAuth();
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
 
   const handleOk = () => {
-    form.submit();
     setConfirmLoading(true);
-    setTimeout(() => {
-      onClose?.();
-      setConfirmLoading(false);
-    }, 2000);
+    form.submit();
   };
 
   const handleCancel = () => {
@@ -24,11 +22,24 @@ const LoginModal: React.FC<LoginModalProps> = ({ open = false, onClose }) => {
   };
 
   const onFinish = (values: any) => {
-    console.log("Success:", values);
+    login(values.username, values.password)
+      .then(() => {
+        notification.success({
+          message: `Welcome ${values.username}`,
+          description: "Logged in successfully",
+        });
+        form.resetFields();
+        onClose?.();
+      })
+      .finally(() => setConfirmLoading(false));
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+  const onFinishFailed = () => {
+    notification.error({
+      message: `Error on login`,
+      description: "Try again",
+    });
+    onClose?.();
   };
 
   return (
@@ -37,7 +48,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ open = false, onClose }) => {
         title="Login"
         open={open}
         onOk={handleOk}
-        // confirmLoading={confirmLoading}
+        confirmLoading={confirmLoading}
         okText="Login"
         onCancel={handleCancel}
       >
