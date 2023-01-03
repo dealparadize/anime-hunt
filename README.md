@@ -1,6 +1,6 @@
 <br />
 <p align="center">
-  <img src="https://github.com/dealparadize/anime-hunt/blob/main/screenshot/1.png" alt="Logo" width="500" height="80">
+  <img src="https://github.com/dealparadize/anime-hunt/blob/main/screenshot/1.png" alt="Logo" width="500" height="auto">
 
   <h3 align="center">anime-hunt</h3>
 
