@@ -30,22 +30,55 @@ export const GET_ANIME = gql`
   query getAnime($id: Int) {
     Media(id: $id) {
       id
+
       title {
         english
         native
       }
+
       description
       type
       genres
       status
       bannerImage
+
       coverImage {
         extraLarge
         large
         medium
         color
       }
+
+      format
+      episodes
+      duration
       averageScore
+
+      characters {
+        nodes {
+          id
+          name {
+            full
+          }
+          image {
+            large
+            medium
+          }
+        }
+      }
+
+      staff {
+        nodes {
+          name {
+            full
+          }
+          image {
+            large
+            medium
+          }
+          primaryOccupations
+        }
+      }
     }
   }
 `;

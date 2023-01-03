@@ -58,10 +58,14 @@ const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
           <HeartFilled
             onClick={handleUnfav}
             key="heart"
-            style={{ color: purple[8] }}
+            style={{ color: "red", fontSize: "16px" }}
           />
         ) : (
-          <HeartOutlined onClick={handleFav} key="heart" />
+          <HeartOutlined
+            onClick={handleFav}
+            key="heart"
+            style={{ fontSize: "16px" }}
+          />
         ),
         <>
           {anime?.averageScore}{" "}
@@ -85,4 +89,4 @@ const AnimeCard: React.FC<AnimeCardProps> = ({ anime }) => {
   );
 };
 
-export default AnimeCard;
+export default React.memo(AnimeCard);

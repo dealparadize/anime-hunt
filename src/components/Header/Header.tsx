@@ -14,6 +14,10 @@ const Title = styled.h1`
   font-family: "Rubik Vinyl", cursive;
   font-size: 3rem;
   color: palevioletred;
+
+  @media (max-width: 1024px) {
+    font-size: 1.4rem;
+  }
 `;
 
 const StyledHeader = styled.header`
@@ -66,7 +70,7 @@ const Header: React.FC = () => {
       <LoginModal open={showLoginModal} onClose={onHideLoginModal} />
       <StyledHeader>
         <Row align="middle">
-          <Col span={8}>
+          <Col xs={{ order: 1, span: 8 }} md={{ span: 8 }}>
             <img
               style={{ cursor: "pointer" }}
               src={logo}
@@ -75,12 +79,12 @@ const Header: React.FC = () => {
               onClick={handleNavigateRoot}
             />
           </Col>
-          <Col span={8}>
+          <Col xs={{ order: 2, span: 16 }} md={{ span: 8 }}>
             <Row justify="center">
               <Title>anime-hunt</Title>
             </Row>
           </Col>
-          <Col span={8}>
+          <Col xs={{ order: 3, span: 24 }} md={{ span: 8 }}>
             <Row justify="end" align="middle">
               {user && (
                 <Text style={{ marginRight: "1rem" }}>{user?.user}</Text>

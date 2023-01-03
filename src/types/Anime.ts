@@ -16,4 +16,34 @@ export type Anime = {
     color?: string;
   };
   averageScore?: string;
+  format?: number;
+  episodes?: number;
+  duration?: number;
+
+  characters: {
+    nodes: Array<{
+      id: string;
+      name?: {
+        full?: string;
+      };
+      image?: {
+        large?: string;
+        medium?: string;
+      };
+    }>;
+  };
+
+  staff: {
+    nodes: Array<{
+      id: string;
+      name?: {
+        full?: string;
+      };
+      primaryOccupations: Array<string>;
+      image?: {
+        large?: string;
+        medium?: string;
+      };
+    }>;
+  };
 };

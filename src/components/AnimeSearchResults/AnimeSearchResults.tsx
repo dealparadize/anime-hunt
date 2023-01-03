@@ -29,6 +29,7 @@ const AnimeSearchResults: React.FC<AnimeSearchResultsProps> = ({ search }) => {
 
   return (
     <Row gutter={[24, 24]} justify="center">
+      {!animes?.length && <>no animes found!</>}
       {animes?.map((anime: Anime) => (
         <Col key={anime?.id}>
           <AnimeCard anime={anime} />
